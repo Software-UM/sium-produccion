@@ -225,13 +225,13 @@ class Asistencias {
 	 * @param $fecha
 	 * @return array
 	 */
-	public function getAsitencias($idEmpleado, $idAsignacion, $tipoHorario, $fecha) {
+	public function getAsistencias($idEmpleado, $idAsignacion, $tipoHorario, $fecha) {
 		try {
-			$asisistencia = Asistencia::where([['fecha', $fecha],
+			$asistencia = Asistencia::where([['fecha', $fecha],
 				['id_empleado', $idEmpleado],
-				['id_asignacion_horario', $idAsignacion],
-				['estado', $tipoHorario]])->get();
-			return $asisistencia;
+				//['estado', $tipoHorario],
+				['id_asignacion_horario', $idAsignacion]])->get();
+			return $asistencia;
 		} catch (QueryException $e) {
 			return ['error' => 'Error al obtener la asistencia: ' . $e->getMessage()];
 		}
@@ -316,27 +316,34 @@ class Asistencias {
 		if ($valor == 125) {
 			$valor = 3;
 		}
-		/*if ($this->evaluarLimite($fechaActual, $horaEntrada, $parametro->tiempo_antes * 60) || $this->evaluarRetardo($fechaActual, $horaEntrada)) {
-			//Asistencia de entrada
-			if ($this->checkChequeo($idEmpleado, $horario->id_asignacion_horario, 1)){
-				$valor = 4;
-			}elseif ($this->evaluarLimite($fechaActual, $horaEntrada, $parametro->tiempo_antes * 60)){
-				$this->checkAsistencia($idEmpleado,1,$horario->id_asignacion_horario,$horaChequeo,2,1);
-				$valor = 1;
-			}else{
-				$this->checkAsistencia($idEmpleado,1,$horario->id_asignacion_horario,$horaChequeo,1,1);
-				$valor = 2;
-			}
-		} elseif ($this->evaluarLimite($fechaActual, $horaSalida, $parametro->tiempo_despues * 60)) {
-			//se checa asistencia de salida
-			$this->checkAsistencia($idEmpleado,2,$horario->id_asignacion_horario,$horaChequeo,2,1);
-			$valor = 1;
-		} else {
-			$valor = 3;
-		}*/
-
 		return $valor;
+	}
 
+	public function compararHoras_v2($fechaActual, $horaEntrada, $horaSalida, $horario, $idEmpleado, $horaChequeo, $bandera) 
+	{
+		$valor = 0;
+		//obtenemos el tipo de horario y los parametros
+		$hor = new Horarios();
+		$asignacionHorario = new AsignacionHorario();
+		$asignacionHorarios = $asignacionHorario->getAsignacionHorario($horario->id_asignacion_horario);
+		$horarios = $hor->getHorario($asignacionHorarios->id_horario);
+		$tipo = new TipoHorario();
+		$tipos = $tipo->getTipoHorario($horarios->id_tipo_horario);
+		$params = new Parametro();
+		$parametro = $params->getParametro($tipos->id_parametros);
+		$cantidad = $this->comparaHorario($horaEntrada, $horaSalida);
+		//validamos si corresponde al tiempo estimado para hacer la asistencia
+		if($bandera == 0) { //si es 0, significa que falta checar entrada
+			$valor = $this->evaluarLimiteDocenteEntrada($fechaActual, $horaEntrada, $parametro->tiempo_antes * 60,
+							$parametro->tiempo_despues * 60, $idEmpleado, $horario->id_asignacion_horario, $horaChequeo);
+		} else if($bandera == 1) { //si es 1, falta checar salida
+			$valor = $this->evaluarLimiteDocenteSalida($fechaActual, $horaSalida, $parametro->tiempo_antes * 60, 
+							$parametro->tiempo_despues * 60, $idEmpleado, $horario->id_asignacion_horario, $horaChequeo, $cantidad);
+		}
+		if ($valor == 125) {
+			$valor = 3;
+		}
+		return $valor;
 	}
 
 	public function evaluarAdmon($fechaActual, $horaEntrada, $horaSalida, $horario, $idEmpleado, $horaChequeo){
@@ -564,8 +571,8 @@ class Asistencias {
 		$check = false;
 		$hoy = date('Y-m-d');
 		$asistencia = new Asistencias();
-		$respuesta = $this->getAsitencias($idEmpleado, $idAsignacion, $tipoHorario, $hoy);
-		if (!isset($respuesta['error'])) {
+		$respuesta = $this->getAsistencias($idEmpleado, $idAsignacion, $tipoHorario, $hoy);
+		if (!isset($respuesta['error'])) { //No hubo excepción 
 			if (count($respuesta)>0) {
 				// se hace el update
 				$asistencia->setId($respuesta[0]['id']);
@@ -590,6 +597,61 @@ class Asistencias {
 				$asistencia->setIdEmpleado($idEmpleado);
 				$asistencia->setIdAsignacionHorario($idAsignacion);
 				$asistencia->setFecha($hoy);
+				switch ($tipoEntrada) {
+					case 1:
+						//insert hora de entrada
+						$asistencia->setHoraLlegada($horario);
+						break;
+					case 2:
+						//insert hora salida
+						$asistencia->setHoraSalida($horario);
+						break;
+				}
+				$response = $asistencia->insertAsistencia($asistencia);
+				if (isset($response['success'])){
+					$check = true;
+				}else{
+					echo $response['error'];
+					$check = false;
+				}
+			}
+		}
+
+		return $check;
+	}
+
+	public function checkAsistenciaDocente($idEmpleado, $tipoEntrada, $idAsignacion, $horario, $estado, $tipoHorario, $fechaHoy) {
+		$check = false;
+		$asistencia = new Asistencias();
+		$respuesta = $this->getAsistencias($idEmpleado, $idAsignacion, $tipoHorario, $fechaHoy);
+		if (!isset($respuesta['error'])) { //No hubo excepción 
+			if (count($respuesta)>0) {
+				// se hace el update
+				$asistencia->setId($respuesta[0]['id']);
+				$asistencia->setHoraLlegada($respuesta[0]['hora_llegada']);
+				$asistencia->setHoraSalida($horario);
+				if($respuesta[0]['id_estado'] != 4) //Si se ha registrado falta
+					$asistencia->setIdEstado($estado);
+				else
+					$asistencia->setIdEstado($respuesta[0]['id_estado']);
+				$asistencia->setEstado($respuesta[0]['estado']);
+				$asistencia->setIdEmpleado($idEmpleado);
+				$asistencia->setIdAsignacionHorario($idAsignacion);
+				$asistencia->setFecha($fechaHoy);
+				$response =  $asistencia->updateAsistencia($asistencia);
+				if (isset($response['success'])){
+					$check = true;
+				}else{
+					echo $response['error'];
+					$check  =false;
+				}
+			} else {
+				// se hace el insert
+				$asistencia->setIdEstado($estado);
+				$asistencia->setEstado($tipoHorario);
+				$asistencia->setIdEmpleado($idEmpleado);
+				$asistencia->setIdAsignacionHorario($idAsignacion);
+				$asistencia->setFecha($fechaHoy);
 				switch ($tipoEntrada) {
 					case 1:
 						//insert hora de entrada
