@@ -391,6 +391,11 @@ class ReporteDocente {
 								$retardos++;
 							} else if ($valor[0]['id_estado'] == 2) {
 								$fpdi->write(10, "A TIEMPO");
+							} else if ($valor[0]['id_estado'] == 4) {
+								$fpdi->setFont('Arial', '', 7);
+								$fpdi->setXY(121, $Y);
+								$fpdi->write(10, "LIMITE-TIEMPO");
+								$fpdi->setFont('Arial', '', 8);
 							} else {
 								$fpdi->setFont('Arial', '', 6);
 								$fpdi->setXY(124, $Y);
@@ -400,7 +405,7 @@ class ReporteDocente {
 							$fpdi->setXY(100, $Y);
 							$fpdi->write(10, $valor[0]['hora_salida']);
 							$fpdi->setXY(180, $Y);
-							if (empty($valor[0]['hora_salida']) || empty($valor[0]['hora_llegada'])) {
+							if (empty($valor[0]['hora_salida']) || empty($valor[0]['hora_llegada']) || $valor[0]['id_estado'] == 4) {
 								//mandamos algo de falta ya que no cumplio con el chequeo
 								$fpdi->setXY(176, $Y);
 								$fpdi->write(10, 'FALTA');
