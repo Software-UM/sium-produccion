@@ -121,7 +121,7 @@ class HomeController extends Controller {
 		$buscarAsistencia = Asistencia::where([['id_asignacion_horario', $horarioActual->id_asignacion_horario], ['fecha', $fechaActual]])->first();
 		$guardar = new Asistencias();
 		$duracion = $guardar->comparaHorario($horarioActual->hora_entrada , $horarioActual->hora_salida); // se identifica si la clase dura 1 hr o más
-		echo '<br>id_asignacion_horario: '.$horarioActual->id_asignacion_horario.', fechaActual: '.$fechaActual;
+		//echo '<br>id_asignacion_horario: '.$horarioActual->id_asignacion_horario.', fechaActual: '.$fechaActual;
 
 		$tipoHora = 0; // 1-Llegada, 2-Salida
 		$tipoAsistencia = 0; // 1-Retardo, 2-Asistencia
