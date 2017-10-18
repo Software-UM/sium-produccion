@@ -101,6 +101,7 @@ class HomeController extends Controller {
 				} else {
 					$valor = 0;
 				}
+				$valor = 1;
 				$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
 
 				return json_encode([$parametros]);
@@ -140,8 +141,7 @@ class HomeController extends Controller {
 		// Se registra la asistencia
 		if($tipoAsistencia == 1 || $tipoAsistencia == 2 || $tipoAsistencia == 4) // Se registra la asistencia si es retardo o en tiempo
 			$checkGuardado = $guardar->checkAsistenciaDocente($id_empleado, $tipoHora, $horarioActual->id_asignacion_horario, $horaActual, $tipoAsistencia, 1, $fechaActual);
-		//return $tipoAsistencia;
-		return 1;
+		return $tipoAsistencia;
 	}
 
 	public function validaAsistencia($horaChecado, $horaES, $duracion, $tipoHora)
