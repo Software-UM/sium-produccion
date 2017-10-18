@@ -80,13 +80,11 @@ class HomeController extends Controller {
 				$valor = 0;
 				if (count($horarios) > 0) {
 					$hora = date("G:i:s");
-					//para realizar pruebas
-					/*$fechaTomada = date('Y-m-d', strtotime('15-10-2017'));
-					$diaConsultar = Utilerias::getDiaDB($fechaTomada);
-					$horarioActual = date('Y-m-d G:i:s', strtotime('15-10-2017 13:40:01'));
-					$hora = date('G:i:s', strtotime('13:40:01'));
-					$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);*/
-					//seccion de pruebas
+					//para realizar pruebas **************************************************
+					//$hora = date('G:i:s', strtotime('13:19:32'));
+					//$fechaTomada = date('Y-m-d', strtotime('17-10-2017'));
+					//$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
+					//seccion de pruebas    **************************************************
 					foreach ($horarios as $horario) {
 						$valor = $this->guardarAsistenciaDocente($idEmpleado, $horario, $hora, $fechaTomada);
 						/* original
@@ -101,17 +99,21 @@ class HomeController extends Controller {
 				} else {
 					$valor = 0;
 				}
-				$valor = 1;
-				$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
-
+				switch ($valor) {
+					case 1:
+						$respuesta = 2; break; // Sium 1-Retardo | App 2-Retardo
+					case 2:
+						$respuesta = 1; break; // Sium 2-Atiempo | App 1-Atiempo
+					default:
+						$respuesta = 3; break;
+				}
+				//$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
+				$parametros = ['respuesta' => $respuesta, 'empleado' => $empleados, 'hora' => $horarioActual];
 				return json_encode([$parametros]);
 			}else{
 				$parametros = ['respuesta' => 6];
-
 				return json_encode([$parametros]);
 			}
-
-
 		} else {
 			return json_encode([['response' => "NO"]]);
 		}

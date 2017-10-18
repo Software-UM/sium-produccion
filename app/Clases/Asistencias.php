@@ -630,10 +630,21 @@ class Asistencias {
 				$asistencia->setId($respuesta[0]['id']);
 				$asistencia->setHoraLlegada($respuesta[0]['hora_llegada']);
 				$asistencia->setHoraSalida($horario);
-				if($respuesta[0]['id_estado'] != 4 || $respuesta[0]['id_estado'] != 1) //Si se ha registrado falta o retardo
-					$asistencia->setIdEstado($estado);
-				else
-					$asistencia->setIdEstado($respuesta[0]['id_estado']);
+				//echo '>>>>TIPO_ASISTENCIA:'.$respuesta[0]['id_estado'];
+				switch ($respuesta[0]['id_estado']) {
+					case 1:
+						if($estado >= 3)
+							$asistencia->setIdEstado($estado);
+						else 
+							$asistencia->setIdEstado($respuesta[0]['id_estado']);
+						break;
+					case 2:
+						$asistencia->setIdEstado($estado);
+						break;
+					default:
+						$asistencia->setIdEstado($respuesta[0]['id_estado']);
+						break;
+				}
 				$asistencia->setEstado($respuesta[0]['estado']);
 				$asistencia->setIdEmpleado($idEmpleado);
 				$asistencia->setIdAsignacionHorario($idAsignacion);
