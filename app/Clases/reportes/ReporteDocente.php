@@ -405,7 +405,7 @@ class ReporteDocente {
 							$fpdi->setXY(100, $Y);
 							$fpdi->write(10, $valor[0]['hora_salida']);
 							$fpdi->setXY(180, $Y);
-							if (empty($valor[0]['hora_salida']) || empty($valor[0]['hora_llegada']) || $valor[0]['id_estado'] == 4) {
+							if (empty($valor[0]['hora_salida']) || empty($valor[0]['hora_llegada'])) {
 								//mandamos algo de falta ya que no cumplio con el chequeo
 								$fpdi->setXY(176, $Y);
 								$fpdi->write(10, 'FALTA');
