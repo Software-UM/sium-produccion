@@ -319,33 +319,6 @@ class Asistencias {
 		return $valor;
 	}
 
-	public function compararHoras_v2($fechaActual, $horaEntrada, $horaSalida, $horario, $idEmpleado, $horaChequeo, $bandera) 
-	{
-		$valor = 0;
-		//obtenemos el tipo de horario y los parametros
-		$hor = new Horarios();
-		$asignacionHorario = new AsignacionHorario();
-		$asignacionHorarios = $asignacionHorario->getAsignacionHorario($horario->id_asignacion_horario);
-		$horarios = $hor->getHorario($asignacionHorarios->id_horario);
-		$tipo = new TipoHorario();
-		$tipos = $tipo->getTipoHorario($horarios->id_tipo_horario);
-		$params = new Parametro();
-		$parametro = $params->getParametro($tipos->id_parametros);
-		$cantidad = $this->comparaHorario($horaEntrada, $horaSalida);
-		//validamos si corresponde al tiempo estimado para hacer la asistencia
-		if($bandera == 0) { //si es 0, significa que falta checar entrada
-			$valor = $this->evaluarLimiteDocenteEntrada($fechaActual, $horaEntrada, $parametro->tiempo_antes * 60,
-							$parametro->tiempo_despues * 60, $idEmpleado, $horario->id_asignacion_horario, $horaChequeo);
-		} else if($bandera == 1) { //si es 1, falta checar salida
-			$valor = $this->evaluarLimiteDocenteSalida($fechaActual, $horaSalida, $parametro->tiempo_antes * 60, 
-							$parametro->tiempo_despues * 60, $idEmpleado, $horario->id_asignacion_horario, $horaChequeo, $cantidad);
-		}
-		if ($valor == 125) {
-			$valor = 3;
-		}
-		return $valor;
-	}
-
 	public function evaluarAdmon($fechaActual, $horaEntrada, $horaSalida, $horario, $idEmpleado, $horaChequeo){
 		$hor = new Horarios();
 		$asignacionHorario = new AsignacionHorario();

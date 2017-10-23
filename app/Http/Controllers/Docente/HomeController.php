@@ -100,6 +100,8 @@ class HomeController extends Controller {
 					$valor = 0;
 				}
 				switch ($valor) {
+					case 0:
+						$respuesta = 5; break;
 					case 1:
 						$respuesta = 2; break; // Sium 1-Retardo | App 2-Retardo
 					case 2:
@@ -169,7 +171,6 @@ class HomeController extends Controller {
 			return 4;
 		}
 		return 3;
-		
 	}
 
 	/**

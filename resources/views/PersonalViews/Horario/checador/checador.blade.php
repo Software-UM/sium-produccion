@@ -93,7 +93,10 @@
                             break;
                         case 4:
                             echo "<h2 class='bg-orange'><center><i class='fa fa-check-square-o fa-5x' aria-hidden='true'></i><br>";
-                            echo "YA REGISTRADO</center></h2>";
+                            if($salon != null)
+                                echo "ENTRADA/SALIDA YA REGISTRADA EN ESTE SALON: ".$salon."</center></h2>";
+                            else 
+                                echo "ENTRADA/SALIDA YA REGISTRADA</center></h2>";
                             break;
                         case 6:
                             echo "<h2 class='bg-red'><center><i class='fa fa-times fa-5x' aria-hidden='true'></i><br>";
@@ -101,7 +104,7 @@
                             break;
                         default:
                             echo "<h2 class='bg-red'><center><i class='fa fa-exclamation-circle  fa-5x' aria-hidden='true'></i> <br> ";
-                            echo "NO CUENTA CON UN HORARIO ASIGNADO A ESTE DÍA</center></h2>";
+                            echo "NO CUENTA CON UN HORARIO ASIGNADO</center></h2>";
                             break;
                     }
                 ?>

@@ -301,7 +301,7 @@ class Horarios {
 			->select('horario.*','tiempo_antes','tiempo_despues','asignacion_horario.id AS idAsignacion')
 			->where([['id_empleado',$idEmpleado],
 				['dia',$dia],
-				['asignacion_horario.activo',true]])->get();
+				['asignacion_horario.activo',true]])->orderBy('hora_entrada')->get();
 			return $horario;
 		}catch(QueryException $e){
 			return ["error"=>"error al obtener los horarios: ".$e->getMessage()];
