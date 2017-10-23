@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\User;
+use App\Empleado;
 use Validator;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -68,5 +71,29 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    // FUNCIONES AGREGADAS PARA EVITAR QUE LOS MAESTROS INGRESEN AL SIUM
+    public function login(Request $request)
+    {
+        $this->validate($request, ['email'=>'required|email', 'password'=>'required|min:6']);
+        $credentials = $request->only('email', 'password');
+        if(Auth::attempt($credentials))
+        {
+            $empleado = Empleado::find(Auth::user()->empleado_id);
+            if($empleado->id_tipo_empleado == 10){
+                $this->logout();
+            }
+            else{
+                return redirect()->intended('/');
+            }
+        }
+        return redirect('login')->withInput($request->only('email'))->withErrors(['error'=>'ACCESO DENEGADO']);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('login');
     }
 }

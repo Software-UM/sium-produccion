@@ -101,19 +101,19 @@ class IphoneController extends Controller
 
 		if($tipoHorario	== 2) { // Si es horario normal
 			if($tolerancia >= -600 && $tolerancia <=600) {
-				echo "<br> A tiempo";
+				//echo "<br> A tiempo";
 				$validar = 1;
 			}
 			else if($tolerancia > 600 && $tolerancia <= 1200) {
-				echo "<br> Retardo";
+				//echo "<br> Retardo";
 				$validar = 2;
 			}
 			else if($tolerancia >= 1201 && $tipoHora == 1) {
-				echo "<br> Entrada Fuera de tiempo";
+				//echo "<br> Entrada Fuera de tiempo";
 				$validar = 4;
 			}
 			else if($tolerancia >= 0 && $tipoHora == 2) {
-				echo "<br> Salida A tiempo";
+				//echo "<br> Salida A tiempo";
 				$validar = 1;
 			}
 			else
@@ -128,7 +128,7 @@ class IphoneController extends Controller
 		$tolerancia = (strtotime($horaChecado) - strtotime($horaES));
 		//echo '<br> Desayuno-horaChecado:'.$horaChecado.', horaES:'.$horaES.', tolerancia='.$tolerancia.', tipoHorario='.$tipoHorario.', tipoHora='.$tipoHora;
 		if($tolerancia >=-1200 && $tolerancia <= 1200) {
-			echo "<br> Desayuno A tiempo";
+			//echo "<br> Desayuno A tiempo";
 			$validar = 1;
 		}
 		return $validar;

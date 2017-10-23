@@ -91,8 +91,8 @@
                             <i class="fa fa-btn fa-sign-in"></i> Ingresar
                         </button>
 
-                        <a class="btn btn-link pull-right" href="{{ url('/password/reset') }}">¿Olvidaste tu contraseña?</a>
-                        <a class="btn btn-link pull-right" href="{{ url('/docente/dashboard') }}">¿Eres Docente? Accede Aquí</a>
+                        <!--<a class="btn btn-link pull-right" href="{{ url('/password/reset') }}">¿Olvidaste tu contraseña?</a>
+                        <a class="btn btn-link pull-right" href="{{ url('/docente/dashboard') }}">¿Eres Docente? Accede Aquí</a>-->
                     </div>
                 </div>
             </form>
