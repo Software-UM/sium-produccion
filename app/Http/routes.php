@@ -16,8 +16,8 @@
 	Route::post('/docentes/login/','Docente\HomeController@loginDocenteApp');
 	Route::post('/docentes/logina/','Docente\HomeController@loginAdminApp');
 	Route::post('/docentes/check/','Docente\HomeController@asistenciaDocente');
-	Route::get('/docente/iphone/{qrcode}/{numsalon}', 'Docente\IphoneController@asistenciaDocente');
-	Route::get('/docente/iphonea/{qrcode}', 'Docente\IphoneController@asistenciaAdmin');
+	Route::get('/docente/iphone_docente/{qrcode}/{numsalon}', 'Docente\IphoneController@asistenciaDocente');
+	Route::get('/docente/iphone_admin/{qrcode}', 'Docente\IphoneController@asistenciaAdmin');
 	Route::post('/docentes/checka/','Docente\HomeController@asistenciaAdmin');
 	Route::get('/docente/login','Docente\HomeController@showLoginForm');
 	Route::post('/docente/login','Docente\HomeController@login');
