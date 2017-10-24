@@ -23,11 +23,11 @@
 <div class="wrapper">
     <header class="main-header">
         <!-- Logo -->
-        <a href="/" class="logo">
+        <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>S</b>UM</span>
+            <span class="logo-mini">UM</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>S</b>IUM</span>
+            <span class="logo-lg">Checador UM</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -35,32 +35,6 @@
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
-
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-                    <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('components/dist/img/avatar5.png')}}" class="user-image"
-                                 alt="User Image">
-                            <span class="hidden-xs">Nombre usuario</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <img src="{{ asset('components/dist/img/avatar5.png')}}" class="img-circle"
-                                     alt="User Image">
-
-                                <p>
-                                    Nombre usuario
-                                </p>
-                            </li>
-
-                        </ul>
-                    </li>
-
-                </ul>
-            </div>
         </nav>
     </header>
 </div>
@@ -69,6 +43,9 @@
         <div class="col-sm-12">
             <blockquote>
                 <h4>{{$empleado->getNombre()}} {{$empleado->getApellidos()}}</h4>
+                @if ($salon != null)
+                    <h4>Salón: {{ $salon }}</h4>
+                @endif 
                 <label>Hora de registro:</label><p>{{$hora}}</p>
             </blockquote>
         </div>
