@@ -282,6 +282,7 @@
                                             <option>LICENCIATURA EN CIENCIAS DE LA INFORMÁTICA</option>
                                             <option>LICENCIATURA EN CIENCIAS EN COMPUTACIÓN</option>
                                             <option>LICENCIATURA EN CIENCIAS GEOINFORMÁTICAS</option>
+                                            <option>LICENCIATURA EN COMERCIO Y NEGOCIOS INTERNACIONALES</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN ADMINISTRATIVA</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN FINANCIERA</option>
