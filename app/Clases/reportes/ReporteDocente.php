@@ -514,7 +514,8 @@ class ReporteDocente {
 		$fpdi->SetTitle('Reporte Desayunos');
 		$diferencia = strtotime($fechaFin) - strtotime($fechaInicio);
 		$dias = floor($diferencia / (60 * 60 * 24));
-		$empleados = Empleados::getAdmons($cct);
+		$tipoAdmon = 9; //Administrativo
+		$empleados = Empleados::getAdmons($cct, $tipoAdmon);
 		foreach ($empleados AS $empleado) {
 			$fpdi->addPage();
 			$fpdi->useTemplate($tplIdx, 0, 0);
