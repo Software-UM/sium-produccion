@@ -1,4 +1,5 @@
 @extends('layout.principal')
+@section('campus') {{$plantel->nombre}} @endsection
 @section('title',"Menu principal")
 @section('css')
     <style type="text/css">

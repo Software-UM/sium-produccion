@@ -229,7 +229,7 @@ class Asistencias {
 		try {
 			$asistencia = Asistencia::where([['fecha', $fecha],
 				['id_empleado', $idEmpleado],
-				//['estado', $tipoHorario],
+				['estado', $tipoHorario],
 				['id_asignacion_horario', $idAsignacion]])->get();
 			return $asistencia;
 		} catch (QueryException $e) {

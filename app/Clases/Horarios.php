@@ -258,7 +258,7 @@ class Horarios {
 	 * @param $dia
 	 * @return array
 	 */
-	public static function getHorariClase($idDocente , $dia){
+	public static function getHorariClase($idDocente , $dia) {
 		try {
 			$horario = Horario::join('asignacion_horario','asignacion_horario.id_horario','=','horario.id')
 				->join('asignacion_clase','id_asignacion_horario','=','asignacion_horario.id')
@@ -275,7 +275,7 @@ class Horarios {
 		}
 	}
 
-	public static function getHorariClase2($idDocente , $dia,$numero){
+	public static function getHorariClase2($idDocente , $dia, $numero) {
 		try {
 			$horario = Horario::join('asignacion_horario','asignacion_horario.id_horario','=','horario.id')
 				->join('asignacion_clase','id_asignacion_horario','=','asignacion_horario.id')

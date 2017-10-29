@@ -65,20 +65,19 @@ class HomeController extends Controller {
 			$idEmpleado2 = $objeto->user;
 			#Para resolver el problema de que Cancún no hace cambio de horario, debe cambiarse a true cuando en Chiapas esté con horario de verano
 			$horarioVerano = false;
-			if (intval($idEmpleado) === intval($idEmpleado2)){
+			if (intval($idEmpleado) === intval($idEmpleado2)) {
 				$empleados = new Empleados();
 				$empleados->getSingleEmpleado($idEmpleado);
 				$fechaTomada = date('Y-m-d');
 				$diaConsultar = Utilerias::getDiaDB($fechaTomada);
-				//$diaConsultar = 6; //para pruebas
+				//$diaConsultar = 1; //para pruebas
 				$plantel = $empleados->getCctPlantel();
 				//Buscamos la asignacion de horario del docente
 				if($plantel == 1)
 					$horarios = Horarios::getHorariClase2($empleados->getId(), $diaConsultar, $salon);
-				else
+				else 
 					$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
 				$asistencia = new Asistencias();
-				$buscaAsistencia = new Asistencias();
 				//se encontro algun horario para este docente
 				$horarioActual = date("Y-m-d G:i:s");
 				$valor = 0;
@@ -88,7 +87,7 @@ class HomeController extends Controller {
 					else
 						$hora = date("G:i:s");
 					//para realizar pruebas **************************************************
-					//$hora = date('G:i:s', strtotime('13:19:32'));
+					//$hora = date('G:i:s', strtotime('10:40:00'));
 					//$fechaTomada = date('Y-m-d', strtotime('17-10-2017'));
 					//$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
 					//seccion de pruebas    **************************************************
@@ -119,7 +118,7 @@ class HomeController extends Controller {
 				//$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
 				$parametros = ['respuesta' => $respuesta, 'empleado' => $empleados, 'hora' => $horarioActual];
 				return json_encode([$parametros]);
-			}else{
+			} else {
 				$parametros = ['respuesta' => 6];
 				return json_encode([$parametros]);
 			}
@@ -210,7 +209,6 @@ class HomeController extends Controller {
 		}
 
 	}
-
 	#Recibe por POST la cadena encriptada del QR del administrativo para registrar su hora de Entrada/Salida.
 	public function asistenciaAdmin(Request $request) {
 		if ($request->isJson()) {

@@ -169,9 +169,9 @@
                     alert(errorThrown);
                 },
                 success: function (data, textStatus, jqXHR) {
-                    if(data.length > 0){
-                        $("#asignacion").empty();
-                        var todo = "<option disabled selected>Selecciona una asignación</option>";
+                    $("#asignacion").empty();
+                    var todo = "<option disabled selected>Selecciona una asignación</option>";
+                    if(data.length > 0) { 
                         //recorremos el JSON
                         $.each(data,function(index, value){
                             horaEntrada = value.hora_entrada;
@@ -179,13 +179,11 @@
                             asignacionHorario = value.id_asignacion_horario;
                             todo += "<option value='"+asignacionHorario+"'>"+horaEntrada+ " - " +horaSalida+"<option>";
                         });
-                        $("#asignacion").append(todo);
-                    }else{
-                        $("#asignacion").empty();
-                        var todo = "<option disabled selected>Selecciona una asignación</option>";
-                        $("#asignacion").append(todo);
+                        
+                    } else {
                         alert("No asiganciones para este día");
                     }
+                    $("#asignacion").append(todo);
                 }
             });
         }

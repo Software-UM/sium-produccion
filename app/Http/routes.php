@@ -13,6 +13,7 @@
 
 	Route::get('/', 'HomeController@index');
 	Route::auth();
+	#Rutas para el checador en Android y Iphone
 	Route::post('/docentes/login/','Docente\HomeController@loginDocenteApp');
 	Route::post('/docentes/logina/','Docente\HomeController@loginAdminApp');
 	Route::post('/docentes/check/','Docente\HomeController@asistenciaDocente');
@@ -22,6 +23,7 @@
 	Route::get('/docente/login','Docente\HomeController@showLoginForm');
 	Route::post('/docente/login','Docente\HomeController@login');
 	Route::get('/docente/logout', 'Docente\HomeController@logout');
+	#End! Rutas para checador Android y Iphone
 	Route::group(['middleware' => ['auth:docente']], function (){
 		Route::get('/docente/dashboard', 'Docente\HomeController@index');
 		/** Generar código QR */

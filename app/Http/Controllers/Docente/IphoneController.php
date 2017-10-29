@@ -38,7 +38,7 @@ class IphoneController extends Controller
 		$empleado->getSingleEmpleado($idEmpleado);
 		$fechaTomada = date('Y-m-d');
 		$hora = date("G:i:s");
-		//$hora = date('G:i:s', strtotime('09:04:59'));
+		//$hora = date('G:i:s', strtotime('09:00:00'));
 		$diaConsultar = Utilerias::getDiaDB($fechaTomada);
 		//Buscamos la asignacion de horario del docente
 		$horarios = Horarios::getHorarioAdmin($empleado->getId(), $diaConsultar);
@@ -156,7 +156,7 @@ class IphoneController extends Controller
 		$hora = date("G:i:s");
 		if (count($horarios) > 0) {
 			//para realizar pruebas **************************************************
-			//$hora = date('G:i:s', strtotime('12:40:32'));
+			//$hora = date('G:i:s', strtotime('09:00:00'));
 			//$fechaTomada = date('Y-m-d', strtotime('17-10-2017'));
 			//$horarios = Horarios::getHorariClase($empleado->getId(), $diaConsultar);
 			//seccion de pruebas    **************************************************

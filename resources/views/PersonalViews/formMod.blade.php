@@ -229,6 +229,7 @@
                                             <option>INGENIERÍA EN CIENCIAS COMPUTACIONALES</option>
                                             <option>INGENIERÍA EN CIENCIAS COMPUTACIONALES Y TELECOMUNICACIONES</option>
                                             <option>INGENIERÍA EN CIENCIAS DE LA COMPUTACIÓN</option>
+                                            <option>LICENCIATURA EN COMERCIO Y NEGOCIOS INTERNACIONALES</option>
                                             <option>INGENIERÍA EN COMPUTACIÓN</option>
                                             <option>INGENIERÍA EN COMPUTACIÓN E INFORMÁTICA</option>
                                             <option>INGENIERÍA EN COMPUTACIÓN ESPECIALIDAD SOFTWARE DE SISTEMAS</option>
@@ -289,7 +290,6 @@
                                             <option>LICENCIATURA EN CIENCIAS DE LA INFORMÁTICA</option>
                                             <option>LICENCIATURA EN CIENCIAS EN COMPUTACIÓN</option>
                                             <option>LICENCIATURA EN CIENCIAS GEOINFORMÁTICAS</option>
-                                            <option>LICENCIATURA EN COMERCIO Y NEGOCIOS INTERNACIONALES</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN ADMINISTRATIVA</option>
                                             <option>LICENCIATURA EN COMPUTACIÓN FINANCIERA</option>
