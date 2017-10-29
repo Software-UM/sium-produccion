@@ -342,7 +342,7 @@ class ReporteDocente {
 				$diaConsultar = self::getDiaBD($weekday);
 				$horarios = Horarios::getHorariClase($docente->id, $diaConsultar);
 				if(count($horarios) == 0) {
-					$horarios = Horarios::getHorarioRegistrado($docente->getId(), $diaConsultar, $fechaTomada);
+					$horarios = Horarios::getHorarioRegistrado($docente->id, $diaConsultar, $fechaTomada);
 					$banAsignado = false;
 				}
 				//TENIEDO LOS DIAS CHECAMOS DIA POR DIA TRANSCURRIDO
@@ -490,7 +490,7 @@ class ReporteDocente {
 				$fpdi->setFont('Arial', 'B', 8);
 				//nombre
 				$fpdi->setXY(20, 25.5);
-				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'No existen registros de asistencia de: '.$docente->getNombre()." ".$docente->getApellidos()));
+				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'No existen registros de asistencia de: '.$docente->nombre.' '.$docente->apellidos));
 				//Fecha entrada y salida
 				$fpdi->setXY(20, 30.5);
 				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'en el período de ['.$fechaInicio.'] al ['.$fechaFin.'], verifique los datos de entrada, por favor.'));
