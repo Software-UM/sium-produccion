@@ -102,7 +102,7 @@ class ReporteDocente {
 	 * @param $fechaInicio
 	 * @param $fechaFin
 	 */
-	public static function imprimeAdmon($fechaInicio, $fechaFin,$cct) {
+	public static function imprimeAdmon($fechaInicio, $fechaFin, $cct, $tipoAdmon) {
 		$fpdi = new \fpdi\FPDI('P', 'mm', 'A4');
 		$link = "components/pdf/admon.pdf";
 		$pageCount = $fpdi->setSourceFile($link);
@@ -111,7 +111,7 @@ class ReporteDocente {
 		$fpdi->SetTitle('Reporte Administrativo');
 		$diferencia = strtotime($fechaFin) - strtotime($fechaInicio);
 		$dias = floor($diferencia / (60 * 60 * 24));
-		$empleados = Empleados::getAdmons($cct);
+		$empleados = Empleados::getAdmons($cct, $tipoAdmon);
 		foreach ($empleados AS $empleado) {
 			$fpdi->addPage();
 			$fpdi->useTemplate($tplIdx, 0, 0);
@@ -341,7 +341,7 @@ class ReporteDocente {
 				$weekday = date('N', strtotime($fechaTomada));
 				$diaConsultar = self::getDiaBD($weekday);
 				$horarios = Horarios::getHorariClase($docente->id, $diaConsultar);
-				if(count($horarios) == 0) { #En caso de no encontrar horarios asignados, se buscan asistencias registradas
+				if(count($horarios) == 0) {
 					$horarios = Horarios::getHorarioRegistrado($docente->getId(), $diaConsultar, $fechaTomada);
 					$banAsignado = false;
 				}
@@ -485,7 +485,7 @@ class ReporteDocente {
 				$fpdi->Write(10, $horasTrabajadas);
 				$fpdi->setXY(175, 242);
 				$fpdi->Write(10, $horasTrabajadas - $subretardos);
-			} else {
+			}  else {
 				$fpdi->addPage();
 				$fpdi->setFont('Arial', 'B', 8);
 				//nombre
@@ -1264,7 +1264,7 @@ class ReporteDocente {
 							$fpdi->setXY(180, $Y);
 							$fpdi->write(10, round($valor));
 						}
-						//$horasAsignadas+= $valor2;
+						//$horasAsignadas+= round($valor2);
 					} else {
 						$fpdi->setXY(80, $Y);
 						$fpdi->write(10, "-----");
@@ -1274,7 +1274,7 @@ class ReporteDocente {
 						$fpdi->write(10, "-----");
 						$fpdi->setXY(153, $Y);
 						$valor2 = self::calcularHoras($fechaTomada, $horario->hora_entrada, $horario->hora_salida);
-						$horasAsignadas+= $valor2;
+						$horasAsignadas += round($valor2);
 						$fpdi->write(10, $valor2);
 						$fpdi->setXY(180, $Y);
 						$fpdi->write(10, 0);

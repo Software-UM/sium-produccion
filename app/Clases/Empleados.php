@@ -729,11 +729,15 @@ class Empleados {
 	 * recibe el plantel a imprimir
 	 * @return array
 	 */
-	public static function getAdmons($cct) {
+	public static function getAdmons($cct, $tipoAdmon) {
 		try {
 			$empleado = Empleado::select('empleado.id as id',
 				DB::raw('CONCAT(empleado.nombre,\' \', empleado.apellidos) as nombre'))
-				->where([['cct_plantel', '=', $cct], ['id_puesto', '<>', 9],['status',1]])->get();
+				->where([['cct_plantel', '=', $cct], 
+						 ['id_puesto', '<>', 9],
+						 ['status', 1],
+						 ['id_tipo_empleado', $tipoAdmon]]
+						)->get();
 			return $empleado;
 		} catch (\Illuminate\Database\QueryException $e) {
 			return ['error' => 'fallo al obtener la lista de los docentes' . $e->getMessage()];

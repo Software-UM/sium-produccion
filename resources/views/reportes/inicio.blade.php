@@ -109,6 +109,20 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-lg-3 col-xs-6">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>Asistencia</h3>
+                                    <p>Becarios</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </div>
+                                <a href="#" onclick="generarBecarios()" class="small-box-footer">
+                                    Generar <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
                     @endif
                     <div class="col-lg-3 col-xs-6">
                         <div class="small-box bg-green">
@@ -375,6 +389,11 @@
 
         function generaAsisDoc() {
             $("#act").val(4);
+            $("#myModal").modal();
+        }
+
+        function generarBecarios() {
+            $("#act").val(5);
             $("#myModal").modal();
         }
 

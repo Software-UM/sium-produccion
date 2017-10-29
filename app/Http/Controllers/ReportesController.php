@@ -46,26 +46,32 @@ class ReportesController extends Controller
         //cargamos los empleados generales por plantlel
         $empleados = new Empleados();
         $singleEmpleado = $empleados->getSingleEmpleado($idEmpleado);
+        $tipoAdmon = 0; # 9 - Administrativo, 11 - Becarios. Indica el reporte que se va a generar.
 		switch ($request->act){
 			case 1:
 			    //obtenemos el ciclo activo
                 $ciclos = new Ciclo();
                 $ciclo = $ciclos->getCicloActivo();
 				//Llamamos el reporte del docente
-                ReporteDocente::imprimeDocente($request->fechaInicio,$request->fechaFin,$ciclo[0]['id'],$singleEmpleado->cct_plantel);
+                ReporteDocente::imprimeDocente($request->fechaInicio, $request->fechaFin, $ciclo[0]['id'], $singleEmpleado->cct_plantel);
 				break;
 			case 2:
-				ReporteDocente::imprimeAdmon($request->fechaInicio,$request->fechaFin,$singleEmpleado->cct_plantel);
+				$tipoAdmon = 9; //Administrativo
+				ReporteDocente::imprimeAdmon($request->fechaInicio, $request->fechaFin, $singleEmpleado->cct_plantel, $tipoAdmon);
 				break;
 			case 3:
-				ReporteDocente::imprimeDesayunos($request->fechaInicio,$request->fechaFin,$singleEmpleado->cct_plantel);
+				ReporteDocente::imprimeDesayunos($request->fechaInicio, $request->fechaFin, $singleEmpleado->cct_plantel);
 				break;
 			case 4:
 				//obtenemos el ciclo activo
 				$ciclos = new Ciclo();
 				$ciclo = $ciclos->getCicloActivo();
 				//Llamamos el reporte del docente
-				ReporteDocente::imprimeConcentrado($request->fechaInicio,$request->fechaFin,$ciclo[0]['id'],$singleEmpleado->cct_plantel);
+				ReporteDocente::imprimeConcentrado($request->fechaInicio, $request->fechaFin, $ciclo[0]['id'], $singleEmpleado->cct_plantel);
+				break;
+			case 5:
+				$tipoAdmon = 11; //Becario
+				ReporteDocente::imprimeAdmon($request->fechaInicio, $request->fechaFin, $singleEmpleado->cct_plantel, $tipoAdmon);
 				break;
 		}
 	}
