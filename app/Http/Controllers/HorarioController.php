@@ -642,8 +642,9 @@ class HorarioController extends Controller {
         $empleado = new Empleados();
         $singleEmpleado = $empleado->getSingleEmpleado($idEmpleado);
         $plantel = Plantel::find($singleEmpleado->cct_plantel);
+        $tipoAdmon = 9; //Administrativo
 		return view('PersonalViews.Horario.Asignacion.incidencia',
-            ['empleados' => Empleados::getAdmons($singleEmpleado->cct_plantel), 'plantel' => $plantel]);
+            ['empleados' => Empleados::getAdmons($singleEmpleado->cct_plantel, $tipoAdmon), 'plantel' => $plantel]);
 	}
 
 	public function saveIncidencia(Request $request) {
