@@ -334,12 +334,17 @@ class ReporteDocente {
 			$Y = 42;
 			$jj = 0;
 			for ($i = 0; $i <= $dias; $i++) {
+				$banAsignado = true;
 				//CHECAMOS DIA POR DIA LA ASIGNACION DE HORAS QUE TIENEN
 				//fecha a consultar
 				$fechaTomada = date('Y-m-d', strtotime($fechaInicio . ' +' . $i . ' day'));
 				$weekday = date('N', strtotime($fechaTomada));
 				$diaConsultar = self::getDiaBD($weekday);
 				$horarios = Horarios::getHorariClase($docente->id, $diaConsultar);
+				if(count($horarios) == 0) { #En caso de no encontrar horarios asignados, se buscan asistencias registradas
+					$horarios = Horarios::getHorarioRegistrado($docente->getId(), $diaConsultar, $fechaTomada);
+					$banAsignado = false;
+				}
 				//TENIEDO LOS DIAS CHECAMOS DIA POR DIA TRANSCURRIDO
 				if (count($horarios) > 0) {
 					if ($find == 0) {
@@ -410,16 +415,29 @@ class ReporteDocente {
 								$fpdi->setXY(176, $Y);
 								$fpdi->write(10, 'FALTA');
 								$valor2 = self::calcularHoras($fechaTomada, $horario->hora_entrada, $horario->hora_salida);
-								$horasAsignadas+= $valor2;
 								$fpdi->setXY(153, $Y);
-								$fpdi->write(10, $valor2);
-								$faltas += $valor2;
+								if ($banAsignado == false) {
+									$fpdi->setXY(148, $Y);
+									$horasAsignadas += 0;
+									$fpdi->write(10, 'NO EXISTE');
+									$faltas += 1;
+								} else {
+									$horasAsignadas += round($valor2);
+									$fpdi->write(10, round($valor2));
+									$faltas += round($valor2);
+								}
 							} else {
 								//calculamos horas asignadas
 								$valor2 = self::calcularHoras($fechaTomada, $horario->hora_entrada, $horario->hora_salida);
-								$horasAsignadas+= $valor2;
 								$fpdi->setXY(153, $Y);
-								$fpdi->write(10, $valor2);
+								if($banAsignado == false) {
+									$fpdi->setXY(148, $Y);
+									$horasAsignadas += 0;
+									$fpdi->write(10, 'NO EXISTE');
+								} else {
+									$horasAsignadas += round($valor2);
+									$fpdi->write(10, round($valor2));
+								}
 								//calculamos las horas trabajadas
 								$valor = self::calcularHoras($valor[0]['fecha'], $valor[0]['hora_llegada'], $valor[0]['hora_salida']);
 								$horasTrabajadas += round($valor);
@@ -467,6 +485,15 @@ class ReporteDocente {
 				$fpdi->Write(10, $horasTrabajadas);
 				$fpdi->setXY(175, 242);
 				$fpdi->Write(10, $horasTrabajadas - $subretardos);
+			} else {
+				$fpdi->addPage();
+				$fpdi->setFont('Arial', 'B', 8);
+				//nombre
+				$fpdi->setXY(20, 25.5);
+				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'No existen registros de asistencia de: '.$docente->getNombre()." ".$docente->getApellidos()));
+				//Fecha entrada y salida
+				$fpdi->setXY(20, 30.5);
+				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'en el período de ['.$fechaInicio.'] al ['.$fechaFin.'], verifique los datos de entrada, por favor.'));
 			}
 		}
 		$fpdi->setTitle("Concentrado");
@@ -1127,12 +1154,17 @@ class ReporteDocente {
 		$Y = 42;
 		$jj = 0;
 		for ($i = 0; $i <= $dias; $i++) {
+			$banAsignado = true;
 			//CHECAMOS DIA POR DIA LA ASIGNACION DE HORAS QUE TIENEN
 			//fecha a consultar
 			$fechaTomada = date('Y-m-d', strtotime($fechaInicio . ' +' . $i . ' day'));
 			$weekday = date('N', strtotime($fechaTomada));
 			$diaConsultar = self::getDiaBD($weekday);
 			$horarios = Horarios::getHorariClase($docente->getId(), $diaConsultar);
+			if(count($horarios) == 0) {
+				$horarios = Horarios::getHorarioRegistrado($docente->getId(), $diaConsultar, $fechaTomada);
+				$banAsignado = false;
+			}
 			//TENIEDO LOS DIAS CHECAMOS DIA POR DIA TRANSCURRIDO
 			if (count($horarios) > 0) {
 				if ($find == 0) {
@@ -1204,21 +1236,35 @@ class ReporteDocente {
 							$fpdi->write(10, 'FALTA');
 							$valor2 = self::calcularHoras($fechaTomada, $horario->hora_entrada, $horario->hora_salida);
 							$fpdi->setXY(153, $Y);
-							$fpdi->write(10, $valor2);
-							$faltas += $valor2;
+							if ($banAsignado == false) {
+								$fpdi->setXY(148, $Y);
+								$horasAsignadas += 0;
+								$fpdi->write(10, 'NO EXISTE');
+								$faltas += 1;
+							} else {
+								$horasAsignadas += round($valor2);
+								$fpdi->write(10, round($valor2));
+								$faltas += round($valor2);
+							}
 						} else {
 							//calculamos horas asignadas
 							$valor2 = self::calcularHoras($fechaTomada, $horario->hora_entrada, $horario->hora_salida);
-							//$horasAsignadas+= $valor2;
 							$fpdi->setXY(153, $Y);
-							$fpdi->write(10, $valor2);
+							if($banAsignado == false) {
+								$fpdi->setXY(148, $Y);
+								$horasAsignadas += 0;
+								$fpdi->write(10, 'NO EXISTE');
+							} else {
+								$horasAsignadas += round($valor2);
+								$fpdi->write(10, round($valor2));
+							}
 							//calculamos las horas trabajadas
 							$valor = self::calcularHoras($valor[0]['fecha'], $valor[0]['hora_llegada'], $valor[0]['hora_salida']);
 							$horasTrabajadas += round($valor);
 							$fpdi->setXY(180, $Y);
 							$fpdi->write(10, round($valor));
 						}
-						$horasAsignadas+= $valor2;
+						//$horasAsignadas+= $valor2;
 					} else {
 						$fpdi->setXY(80, $Y);
 						$fpdi->write(10, "-----");
@@ -1260,6 +1306,15 @@ class ReporteDocente {
 			$fpdi->Write(10, $horasTrabajadas);
 			$fpdi->setXY(175, 242);
 			$fpdi->Write(10, $horasTrabajadas - $subretardos);
+		} else {
+			$fpdi->addPage();
+			$fpdi->setFont('Arial', 'B', 8);
+			//nombre
+			$fpdi->setXY(20, 25.5);
+			$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'No existen registros de asistencia de: '.$docente->getNombre()." ".$docente->getApellidos()));
+			//Fecha entrada y salida
+			$fpdi->setXY(20, 30.5);
+			$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'en el período de ['.$fechaInicio.'] al ['.$fechaFin.'], verifique los datos de entrada, por favor.'));
 		}
 		$fpdi->setTitle($docente->getNombre() . " " . $docente->getApellidos());
 		$fpdi->Output($docente->getNombre() . " " . $docente->getApellidos().".pdf","I");

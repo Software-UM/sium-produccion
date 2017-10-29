@@ -9,6 +9,7 @@
 namespace App\Clases;
 
 use App\Horario;
+use App\Empleado;
 use Illuminate\Database\QueryException;
 use DB;
 
@@ -287,6 +288,22 @@ class Horarios {
 					['numero',$numero],
 					['asignacion_horario.activo',true],
 					['ciclos.activo',1]])->groupBy('clave_materias','id_grupos')->get();
+			return $horario;
+		} catch (QueryException $e) {
+			return ['error' => 'Error al obtener los horarios: '.$e->getMessage()];
+		}
+	}
+
+	public static function getHorarioRegistrado($idDocente, $dia, $fecha)
+	{
+		try {
+			$horario = Empleado::join('asistencia as a', 'empleado.id', '=', 'a.id_empleado')
+						->join('asignacion_horario as ah', 'a.id_asignacion_horario', '=', 'ah.id')
+						->join('horario as ho', 'ah.id_horario', '=', 'ho.id')
+						->select('empleado.id', 'a.hora_llegada as hora_entrada', 'a.hora_salida', 'a.fecha', 'ho.dia', 'a.id_asignacion_horario')
+						->where([['empleado.id', $idDocente],
+							['ho.dia', $dia],
+							['a.fecha', $fecha]])->orderBy('a.fecha', 'a.hora_llegada')->get();
 			return $horario;
 		} catch (QueryException $e) {
 			return ['error' => 'Error al obtener los horarios: '.$e->getMessage()];
