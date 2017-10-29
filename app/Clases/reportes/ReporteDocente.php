@@ -485,15 +485,6 @@ class ReporteDocente {
 				$fpdi->Write(10, $horasTrabajadas);
 				$fpdi->setXY(175, 242);
 				$fpdi->Write(10, $horasTrabajadas - $subretardos);
-			}  else {
-				$fpdi->addPage();
-				$fpdi->setFont('Arial', 'B', 8);
-				//nombre
-				$fpdi->setXY(20, 25.5);
-				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'No existen registros de asistencia de: '.$docente->nombre.' '.$docente->apellidos));
-				//Fecha entrada y salida
-				$fpdi->setXY(20, 30.5);
-				$fpdi->write(10, iconv('UTF-8', 'windows-1252', 'en el período de ['.$fechaInicio.'] al ['.$fechaFin.'], verifique los datos de entrada, por favor.'));
 			}
 		}
 		$fpdi->setTitle("Concentrado");
