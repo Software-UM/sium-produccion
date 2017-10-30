@@ -216,10 +216,12 @@ class HomeController extends Controller {
 			$objeto = (object)$input[0];
 			$idEmpleado = Crypt::decrypt($objeto->id);
 			$idEmpleado2 = $objeto->user;
+			#Para resolver el problema de que Cancún no hace cambio de horario, debe cambiarse a true cuando en Chiapas esté con horario de verano
+			$horarioVerano = false;
 			if (intval($idEmpleado) === intval($idEmpleado2)){
 				$empleados = new Empleados();
 				$empleados->getSingleEmpleado($idEmpleado);
-
+				$plantel = $empleados->getCctPlantel();
 				$fechaTomada = date('Y-m-d');
 				$diaConsultar = Utilerias::getDiaDB($fechaTomada);
 				//Buscamos la asignacion de horario del docente
@@ -231,11 +233,16 @@ class HomeController extends Controller {
 				$valor = 0;
 				$valor2 = 0;
 				if (count($horarios) > 0) {
-					$hora = date("G:i:s");
+					if($plantel == 3 && $horarioVerano == false)
+						$hora = date("G:i:s", strtotime('+1 hours'));
+					else
+						$hora = date("G:i:s");
+					//$hora = date("G:i:s", strtotime('06:50'));
 					foreach ($horarios as $horario) {
 						$compara1 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_entrada));
 						$compara2 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_salida));
 						$numeroHoras = $asistencia->comparaHorario($horario->hora_entrada,$horario->hora_salida);
+						//echo '<br>NumHoras:'.$numeroHoras;
 						if ($numeroHoras > 2) {
 							//validamos horario admon
 							$valor = $asistencia->evaluarAdmon($horarioActual, $compara1, $compara2, $horario, $idEmpleado, $hora);
