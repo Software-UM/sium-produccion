@@ -36,9 +36,16 @@ class IphoneController extends Controller
 		$idEmpleado = Crypt::decrypt($request->qrcode);			
 		$empleado = new Empleados();
 		$empleado->getSingleEmpleado($idEmpleado);
+		#Para resolver el problema de que Cancún no hace cambio de horario, debe cambiarse a true cuando en Chiapas esté con horario de verano
+		$horarioVerano = false;
 		$fechaTomada = date('Y-m-d');
-		$hora = date("G:i:s");
-		//$hora = date('G:i:s', strtotime('09:00:00'));
+		$plantel = $empleado->getCctPlantel();
+		#Se suma 1 hora, si en Chiapas ya no está activo el horario de verano
+		if($plantel == 3 && $horarioVerano == false)
+			$hora = date("G:i:s", strtotime('+1 hours'));
+		else
+			$hora = date("G:i:s");
+		//$hora = date('G:i:s', strtotime('07:00:00'));	
 		$diaConsultar = Utilerias::getDiaDB($fechaTomada);
 		//Buscamos la asignacion de horario del docente
 		$horarios = Horarios::getHorarioAdmin($empleado->getId(), $diaConsultar);
@@ -142,6 +149,8 @@ class IphoneController extends Controller
 		$empleado->getSingleEmpleado($idEmpleado);
 		$fechaTomada = date('Y-m-d');
 		$diaConsultar = Utilerias::getDiaDB($fechaTomada);
+		#Para resolver el problema de que Cancún no hace cambio de horario, debe cambiarse a true cuando en Chiapas esté con horario de verano
+		$horarioVerano = false;
 		//$diaConsultar = 1; //para pruebas
 		$plantel = $empleado->getCctPlantel();
 		//Buscamos la asignacion de horario del docente
@@ -153,7 +162,11 @@ class IphoneController extends Controller
 		//se encontro algun horario para este docente
 		$horarioActual = date("Y-m-d G:i:s");
 		$valor = 0;
-		$hora = date("G:i:s");
+		#Se suma 1 hora, si en Chiapas ya no está activo el horario de verano
+		if($plantel == 3 && $horarioVerano == false)
+			$hora = date("G:i:s", strtotime('+1 hours'));
+		else
+			$hora = date("G:i:s");
 		if (count($horarios) > 0) {
 			//para realizar pruebas **************************************************
 			//$hora = date('G:i:s', strtotime('09:00:00'));
