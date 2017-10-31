@@ -79,13 +79,20 @@ class HomeController extends Controller {
 					$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
 				$asistencia = new Asistencias();
 				//se encontro algun horario para este docente
-				$horarioActual = date("Y-m-d G:i:s");
+				
 				$valor = 0;
 				if (count($horarios) > 0) {
-					if($plantel == 3 && $horarioVerano == false)
+					if($plantel == 3 && $horarioVerano == false){
+						$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
 						$hora = date("G:i:s", strtotime('+1 hours'));
-					else
+					}
+					
+					else{
+						
+					$horarioActual = date("Y-m-d G:i:s");
 						$hora = date("G:i:s");
+					}
+					
 					//para realizar pruebas **************************************************
 					//$hora = date('G:i:s', strtotime('10:40:00'));
 					//$fechaTomada = date('Y-m-d', strtotime('17-10-2017'));
@@ -115,6 +122,16 @@ class HomeController extends Controller {
 					default:
 						$respuesta = 3; break;
 				}
+				if($plantel == 3 && $horarioVerano == false){
+						$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
+						$hora = date("G:i:s", strtotime('+1 hours'));
+					}
+					
+					else{
+						
+					$horarioActual = date("Y-m-d G:i:s");
+						$hora = date("G:i:s");
+					}
 				//$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
 				$parametros = ['respuesta' => $respuesta, 'empleado' => $empleados, 'hora' => $horarioActual];
 				return json_encode([$parametros]);
@@ -229,15 +246,19 @@ class HomeController extends Controller {
 				$asistencia = new Asistencias();
 				//$horarios = AsignacionHorario::getHorarioPersonalDia(, );
 				//se encontro algun horario para este docente
-				$horarioActual = date("Y-m-d G:i:s");
+		
 				$valor = 0;
 				$valor2 = 0;
 				if (count($horarios) > 0) {
-					if($plantel == 3 && $horarioVerano == false)
+					if($plantel == 3 && $horarioVerano == false){
+							$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
+						//$hora = date("G:i:s", strtotime('+1 hours'));
 						$hora = date("G:i:s", strtotime('+1 hours'));
-					else
+					}
+					else{
+						$horarioActual = date("Y-m-d G:i:s");
 						$hora = date("G:i:s");
-					//$hora = date("G:i:s", strtotime('06:50'));
+					}
 					foreach ($horarios as $horario) {
 						$compara1 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_entrada));
 						$compara2 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_salida));
