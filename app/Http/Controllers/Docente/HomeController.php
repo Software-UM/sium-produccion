@@ -73,23 +73,25 @@ class HomeController extends Controller {
 				//$diaConsultar = 1; //para pruebas
 				$plantel = $empleados->getCctPlantel();
 				//Buscamos la asignacion de horario del docente
-				if($plantel == 1)
+				if($plantel == 1){
 					$horarios = Horarios::getHorariClase2($empleados->getId(), $diaConsultar, $salon);
-				else 
+				}
+				else {
 					$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
+				}
 				$asistencia = new Asistencias();
 				//se encontro algun horario para este docente
-				
+				$horarioActual = date("Y-m-d G:i:s");
 				$valor = 0;
 				if (count($horarios) > 0) {
 					if($plantel == 3 && $horarioVerano == false){
-						$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
+					
 						$hora = date("G:i:s", strtotime('+1 hours'));
 					}
 					
 					else{
 						
-					$horarioActual = date("Y-m-d G:i:s");
+		
 						$hora = date("G:i:s");
 					}
 					
