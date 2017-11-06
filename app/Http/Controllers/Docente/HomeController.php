@@ -125,7 +125,7 @@ class HomeController extends Controller {
 						$respuesta = 3; break;
 				}
 				if($plantel == 3 && $horarioVerano == false){
-						$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
+						$horarioActual = date("Y-m-d G:i:s");
 						$hora = date("G:i:s", strtotime('+1 hours'));
 					}
 					
