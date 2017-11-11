@@ -81,6 +81,7 @@ class HomeController extends Controller {
 				}
 				$asistencia = new Asistencias();
 				$valor = 0;
+				$horarioActual = date("Y-m-d G:i:s");
 				//se encontro algun horario para este docente
 				if (count($horarios) > 0) {
 					if($plantel == 3 && $horarioVerano == false) {
@@ -237,19 +238,24 @@ class HomeController extends Controller {
 				$asistencia = new Asistencias();
 				//$horarios = AsignacionHorario::getHorarioPersonalDia(, );
 				//se encontro algun horario para este docente
-		
 				$valor = 0;
 				$valor2 = 0;
 				if (count($horarios) > 0) {
 					if($plantel == 3 && $horarioVerano == false){
-							$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
-						//$hora = date("G:i:s", strtotime('+1 hours'));
+						$horarioActual = date("Y-m-d G:i:s",strtotime('+1 hours'));
 						$hora = date("G:i:s", strtotime('+1 hours'));
+						//$horarioActual = date("Y-m-d G:i:s", strtotime('+1 hour', strtotime('2017-11-11 15:45:00'))); //Probando campus Cancún
+						//$hora = date("G:i:s", strtotime('+1 hour', strtotime('15:45:00'))); //Probando campus Cancún
 					}
 					else{
 						$horarioActual = date("Y-m-d G:i:s");
 						$hora = date("G:i:s");
 					}
+					//***************** VALORES DE PRUEBA *************************
+					//$horarioActual = date("Y-m-d G:i:s", strtotime('2017-11-11 07:30:00'));
+					//$hora = date("G:i:s", strtotime('07:30:00'));
+					//echo '<br>'.$horarioActual.', hora:'.$hora;
+					//***************** VALORES DE PRUEBA *************************
 					foreach ($horarios as $horario) {
 						$compara1 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_entrada));
 						$compara2 = date('Y-m-d G:i:s', strtotime($fechaTomada . " " . $horario->hora_salida));
