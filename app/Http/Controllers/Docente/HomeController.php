@@ -80,23 +80,21 @@ class HomeController extends Controller {
 					$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
 				}
 				$asistencia = new Asistencias();
-				//se encontro algun horario para este docente
-				$horarioActual = date("Y-m-d G:i:s");
 				$valor = 0;
+				//se encontro algun horario para este docente
 				if (count($horarios) > 0) {
-					if($plantel == 3 && $horarioVerano == false){
-					
+					if($plantel == 3 && $horarioVerano == false) {
 						$hora = date("G:i:s", strtotime('+1 hours'));
-					}
-					
-					else{
-						
-		
+						//$hora = date("G:i:s", strtotime('+1 hour', strtotime('10:50:50'))); //Probando campus Cancún
+						//Sólo sirve para mostrar la hora que está checando el maestro
+						$horarioActual = date("Y-m-d G:i:s", strtotime('+1 hour'));  
+					} else {
 						$hora = date("G:i:s");
+						//Sólo sirve para mostrar la hora que está checando el maestro
+						$horarioActual = date("Y-m-d G:i:s");
 					}
-					
 					//para realizar pruebas **************************************************
-					//$hora = date('G:i:s', strtotime('10:40:00'));
+					//$hora = date('G:i:s', strtotime('10:55:41'));
 					//$fechaTomada = date('Y-m-d', strtotime('17-10-2017'));
 					//$horarios = Horarios::getHorariClase($empleados->getId(), $diaConsultar);
 					//seccion de pruebas    **************************************************
@@ -123,17 +121,8 @@ class HomeController extends Controller {
 						$respuesta = 1; break; // Sium 2-Atiempo | App 1-Atiempo
 					default:
 						$respuesta = 3; break;
-				}
-				if($plantel == 3 && $horarioVerano == false){
-						$horarioActual = date("Y-m-d G:i:s");
-						$hora = date("G:i:s", strtotime('+1 hours'));
-					}
-					
-					else{
-						
-					$horarioActual = date("Y-m-d G:i:s");
-						$hora = date("G:i:s");
-					}
+				} 
+				
 				//$parametros = ['respuesta' => $valor, 'empleado' => $empleados, 'hora' => $horarioActual];
 				$parametros = ['respuesta' => $respuesta, 'empleado' => $empleados, 'hora' => $horarioActual];
 				return json_encode([$parametros]);
@@ -197,10 +186,10 @@ class HomeController extends Controller {
 			//echo '<br> Es falta';
 			return 4;
 		}
-		else if($tolerancia >= 3000 && $tolerancia <= 5999 && $tipoHora == 1) { //Si checa entrada después de los parámetros anteriores, se registra.
+		/*else if($tolerancia >= 3000 && $tolerancia <= 5999 && $tipoHora == 1) { //Si checa entrada después de los parámetros anteriores, se registra.
 			//echo '<br> Checó tarde';
 			return 4;
-		}
+		}*/
 		return 3;
 	}
 
